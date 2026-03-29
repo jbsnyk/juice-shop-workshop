@@ -2,7 +2,7 @@
 
 # Snyk Juice Shop - Cursor Async CLI Hooks
 
-Automatically scans for security vulnerabilities as the agent writes code. Runs `snyk code test` via CLIin the background, tracks which lines the agent modified, and blocks the agent from finishing if it introduced new vulnerabilities -- prompting it to fix them first.
+Automatically scans for security vulnerabilities as the agent writes code. Runs `snyk code test` via CLI in the background, tracks which lines the agent modified, and blocks the agent from finishing if it introduced new vulnerabilities -- prompting it to fix them first.
 
 ## Features
 - **Background SAST scanning**: Launches `snyk code test` in the background on every file edit 
