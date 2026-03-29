@@ -30,6 +30,7 @@ These files are already included in this branch, `cursor-async-cli-hooks`. If yo
 └── lib/
     ├── scan_runner.py            # Scan lifecycle, SARIF parsing
     └── scan_worker.py            # Background subprocess
+├── hooks.json 
 ```
 The only think you will need to do is run `chmod +x .cursor/hooks/snyk_secure_at_inception.py`
 
