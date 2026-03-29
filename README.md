@@ -35,4 +35,12 @@ The only think you will need to do is run `chmod +x .cursor/hooks/snyk_secure_at
 
 # How to Know Cursor Hook are Set Up Correctly
 
+There are two ways to see if the Hooks are set up correctly. The first is going to the Terminal within Cursor, clicking output, and changing `Tasks` to `Hooks`. You will see that there are 2 project hooks configured. 
+
+<img width="983" height="265" alt="Screenshot 2026-03-29 at 3 35 01 PM" src="https://github.com/user-attachments/assets/14a9edeb-755d-4169-a4e6-19be03b08e43" />
+
+The second way is going into your `Cursor Settings` > `Hooks`. You will see two hooks configured like the screenshot below. 
+
+<img width="673" height="265" alt="Screenshot 2026-03-29 at 3 37 14 PM" src="https://github.com/user-attachments/assets/15099dd6-e6fa-42c8-b202-9b58080118ee" />
+
 
