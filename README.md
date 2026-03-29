@@ -1,94 +1,38 @@
 *[original Juice Shop readme](./JUICESHOP_README.md)*
 
-# Snyk Juice Shop
+# Snyk Juice Shop - Cursor Async CLI Hooks
 
-This is a vulnerable by design repository for demonstrating Snyk in the IDE. Do not deploy this application in production.
+Automatically scans for security vulnerabilities as the agent writes code. Runs `snyk code test` via CLIin the background, tracks which lines the agent modified, and blocks the agent from finishing if it introduced new vulnerabilities -- prompting it to fix them first.
 
-### A note on consistency
+## Features
+- **Background SAST scanning**: Launches `snyk code test` in the background on every file edit 
+-- non-blocking, the agent keeps working
+- **New-only filtering**: Tracks which lines the agent modified and filters scan results to only 
+report vulnerabilities on those lines
+- **Automatic fix loop**: When new vulnerabilities are found, the agent is blocked from stopping and 
+given a detailed vuln table to fix. After fixing, the cycle repeats until clean
+- **Per-file state management**: Clean files are removed from tracking; only files with unresolved 
+vulns stay tracked
+- **MCP fallback**: If the CLI scan times out, falls back to prompting the agent to use the 
+`snyk_code_scan` MCP tool
+- **Manifest tracking**: Detects changes to dependency manifests (package.json, requirements.txt, 
+etc.) and prompts for SCA scanning
+- **Loop prevention**: Caps scan-fix cycles at 3 to prevent infinite loops
+- **Stale scan detection**: Re-scans automatically if edits happen after the running scan started
 
-The example prompts below may result in different outputs if you're using a different model. Even the same model may return greatly different responses from time to time.
+## Setup and Files
 
-If you experience different results than the workshop leader, try using a more specific prompt. For example, you may prompt `Scan for vulnerabilities using Snyk` and the agent may run a Snyk Code scan instead of Snyk Open Source scan like you were expecting. On the follow up prompt try prompting `Scan for vulnerabilities in my open source dependencies using Snyk Open Source` instead.
-
-## Setup - Prep the Environment
-
+These files are already included in this branch, `cursor-async-cli-hooks`. If you want to see the files that were added, you can do so by going to the directory mentioned below:
+ 
+ ```
+.cursor/hooks/
+├── snyk_secure_at_inception.py   # Entry point, line tracking, vuln filtering
+└── lib/
+    ├── scan_runner.py            # Scan lifecycle, SARIF parsing
+    └── scan_worker.py            # Background subprocess
 ```
-# Clone this repo
-git clone https://github.com/dylansnyk-org/juice-shop-workshop
+The only think you will need to do is run `chmod +x .cursor/hooks/snyk_secure_at_inception.py`
 
-# Install the Snyk CLI
-npm install -g snyk
-```
-- AI-IDE like Cursor, or VS Code in Agent Mode 
-  - In VS Code, search "Chat: Open Chat (Agent)"
-- Snyk [IDE Extension](https://docs.snyk.io/cli-ide-and-ci-cd-integrations/snyk-ide-plugins-and-extensions) installed
-- Configure the [Snyk MCP Server](https://docs.snyk.io/cli-ide-and-ci-cd-integrations/snyk-cli/developer-guardrails-for-agentic-workflows/quickstart-guides-for-mcp) 
+# How to Know Cursor Hook are Set Up Correctly
 
-To test your setup, try the following prompt:
-
-```
-Using Snyk's MCP Server, scan the code for Open Source vulnerabilities.
-```
-
-## Level 1 - Accelerate understanding
-
-Start with asking for more information around a particular recommended fix.
-
-```
-Assess the breakability of upgrading the multer dependency to fix it's critical severity vulnerability.
-```
-
-Assuming the response is positive, let's try fixing it.
-```
-Yes, proceed with the upgrade.
-```
-
-We can also use AI to help better understand SAST findings from Snyk. Let's start by running a SAST scan and asking for an explanation for one of the vulnerabilities.
-
-```
-Scan the code for SAST vulnerabilities.
-```
-
-```
-Choose one of the SQL Injection vulnerabilities in the login.ts file and explain it to me.
-```
-
-## Level 2
-
-Level 1 is also about interfacing with Snyk through natural language. In level 2, we want to seamlessly integrate into agentic workflows.
-
-To automatically trigger Snyk scans, create a rule in your IDE with the following contents:
-
-```
-Always run Snyk Code scanning tool for new first party code generated.
-If any security issues are found based on newly introduced or modified code or dependencies, attempt to fix the issues using the results context from Snyk.
-Rescan the code after fixing the issues to ensure that the issues were fixed and that there are no newly introduced issues.
-```
-
-Now try fixing that SQL Injection.
-```
-Fix this SQL Injection issue.
-```
-
-Notice how Snyk Code is automatically invoked to verify that the fix is secure.
-
-Let's see Snyk Code automatically scan for vulnerabilities in brand new code.
-```
-Add an API endpoint to this file that returns a list of users based on a given search term.
-```
-
-## Level 3
-
-Now that we've added Snyk to our agentic workflow, let's use additional context to better prioritize and align to our internal security and AI policies. 
-
-```
-What is the security policy for this repo?
-```
-```
-Which vulnerabilities do I need to fix for this Tier 3 application?
-```
-
-```
-Create an AIBOM and check if it aligns to my company's AI Usage Policy.
-```
 
