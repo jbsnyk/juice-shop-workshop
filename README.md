@@ -32,7 +32,7 @@ These files are already included in this branch, `cursor-async-cli-hooks`. If yo
     └── scan_worker.py            # Background subprocess
 ├── hooks.json # determines when we run the snyk scanning script
 ```
-The only think you will need to do is run `chmod +x .cursor/hooks/snyk_secure_at_inception.py`
+The only thing you will need to do is run `chmod +x .cursor/hooks/snyk_secure_at_inception.py`
 
 # How to Know Cursor Hook are Set Up Correctly
 
