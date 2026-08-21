@@ -72,3 +72,16 @@ export function searchProducts () {
   }
 }
 // vuln-code-snippet end unionSqlInjectionChallenge dbSchemaChallenge
+
+export function searchUsers () {
+  return (req: Request, res: Response, next: NextFunction) => {
+    let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''
+    criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)
+    models.sequelize.query(`SELECT id, email, role FROM Users WHERE ((email LIKE '%${criteria}%' OR role LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY email`)
+      .then(([users]: any) => {
+        res.json(utils.queryResultToJson(users))
+      }).catch((error: ErrorWithParent) => {
+        next(error.parent)
+      })
+  }
+}
