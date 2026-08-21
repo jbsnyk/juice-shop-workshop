@@ -198,3 +198,25 @@ describe('/rest/products/search', () => {
       })
   })
 })
+
+describe('/rest/products/insecure/:id', () => {
+  it('GET insecure product lookup with numeric id returns one product', () => {
+    return frisby.get(`${REST_URL}/products/insecure/1`)
+      .expect('status', 200)
+      .expect('header', 'content-type', /application\/json/)
+      .then(({ json }) => {
+        expect(json.data.length).toBe(1)
+        expect(json.data[0].id).toBe(1)
+      })
+  })
+
+  it('GET insecure product lookup is vulnerable to WHERE-clause SQL injection', () => {
+    return frisby.get(`${REST_URL}/products/insecure/1%20OR%201=1`)
+      .expect('status', 200)
+      .expect('header', 'content-type', /application\/json/)
+      .then(({ json }) => {
+        expect(json.data.length).toBeGreaterThan(1)
+        expect(json.data.some((product: { id: number }) => product.id === 1)).toBe(true)
+      })
+  })
+})
