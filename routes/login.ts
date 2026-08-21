@@ -14,6 +14,27 @@ import * as models from '../models/index'
 import { type User } from '../data/types'
 import * as utils from '../lib/utils'
 
+class ErrorWithParent extends Error {
+  parent: Error | undefined
+}
+
+export function searchUsers () {
+  return (req: Request, res: Response, next: NextFunction) => {
+    let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''
+    criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)
+    models.sequelize.query(`SELECT * FROM Users WHERE ((email LIKE '%${criteria}%' OR role LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY email`)
+      .then(([users]: any) => {
+        for (let i = 0; i < users.length; i++) {
+          users[i].password = users[i].password?.replace(/./g, '*')
+          users[i].totpSecret = users[i].totpSecret?.replace(/./g, '*')
+        }
+        res.json(utils.queryResultToJson(users))
+      }).catch((error: ErrorWithParent) => {
+        next(error.parent)
+      })
+  }
+}
+
 // vuln-code-snippet start loginAdminChallenge loginBenderChallenge loginJimChallenge
 export function login () {
   function afterLogin (user: { data: User, bid: number }, res: Response, next: NextFunction) {

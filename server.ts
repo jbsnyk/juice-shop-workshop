@@ -64,7 +64,7 @@ import restoreOverwrittenFilesWithOriginals from './lib/startup/restoreOverwritt
 import datacreator from './data/datacreator'
 import locales from './data/static/locales.json'
 
-import { login } from './routes/login'
+import { login, searchUsers } from './routes/login'
 import * as verify from './routes/verify'
 import * as address from './routes/address'
 import * as chatbot from './routes/chatbot'
@@ -592,6 +592,7 @@ restoreOverwrittenFilesWithOriginals().then(() => {
 
   /* Custom Restful API */
   app.post('/rest/user/login', login())
+  app.get('/rest/users/search', searchUsers())
   app.get('/rest/user/change-password', changePassword())
   app.post('/rest/user/reset-password', resetPassword())
   app.get('/rest/user/security-question', securityQuestion())
