@@ -162,6 +162,9 @@ describe('/rest/user/login', () => {
       .expect('jsonTypes', 'authentication', {
         token: Joi.string()
       })
+      .expect('json', 'authentication', {
+        umail: `admin@${config.get<string>('application.domain')}`
+      })
   })
 
   it('POST login with known email "admin@juice-sh.op" in SQL injection attack', () => {
@@ -176,6 +179,9 @@ describe('/rest/user/login', () => {
       .expect('header', 'content-type', /application\/json/)
       .expect('jsonTypes', 'authentication', {
         token: Joi.string()
+      })
+      .expect('json', 'authentication', {
+        umail: `admin@${config.get<string>('application.domain')}`
       })
   })
 
@@ -192,6 +198,9 @@ describe('/rest/user/login', () => {
       .expect('jsonTypes', 'authentication', {
         token: Joi.string()
       })
+      .expect('json', 'authentication', {
+        umail: `jim@${config.get<string>('application.domain')}`
+      })
   })
 
   it('POST login with known email "bender@juice-sh.op" in SQL injection attack', () => {
@@ -207,6 +216,9 @@ describe('/rest/user/login', () => {
       .expect('jsonTypes', 'authentication', {
         token: Joi.string()
       })
+      .expect('json', 'authentication', {
+        umail: `bender@${config.get<string>('application.domain')}`
+      })
   })
 
   it('POST login with non-existing email "acc0unt4nt@juice-sh.op" via UNION SELECT injection attack', () => {
@@ -221,6 +233,9 @@ describe('/rest/user/login', () => {
       .expect('header', 'content-type', /application\/json/)
       .expect('jsonTypes', 'authentication', {
         token: Joi.string()
+      })
+      .expect('json', 'authentication', {
+        umail: `acc0unt4nt@${config.get<string>('application.domain')}`
       })
   })
 
