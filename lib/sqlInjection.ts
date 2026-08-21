@@ -8,6 +8,6 @@ import * as models from '../models/index'
 
 type QueryRunner = Pick<Sequelize, 'query'>
 
-export const findUserByEmailUnsafe = (email: string, database: QueryRunner = models.sequelize) => {
-  return database.query(`SELECT * FROM Users WHERE email = '${email}' AND deletedAt IS NULL`)
+export const findUserByEmailUnsafe = async (email: string, database: QueryRunner = models.sequelize) => {
+  return await database.query(`SELECT * FROM Users WHERE email = '${email}' AND deletedAt IS NULL`)
 }

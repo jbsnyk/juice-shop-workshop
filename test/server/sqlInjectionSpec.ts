@@ -14,9 +14,9 @@ describe('sqlInjection', () => {
     it('concatenates user input directly into the SQL query', async () => {
       let capturedSql = ''
       const database = {
-        query: (sql: string) => {
+        query: async (sql: string) => {
           capturedSql = sql
-          return Promise.resolve([])
+          return []
         }
       } as unknown as Pick<Sequelize, 'query'>
 
